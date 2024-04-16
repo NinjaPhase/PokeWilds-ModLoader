@@ -1,0 +1,2 @@
+rootProject.name = 'PokeWilds-modloader'
+include 'api', 'core', 'sample'

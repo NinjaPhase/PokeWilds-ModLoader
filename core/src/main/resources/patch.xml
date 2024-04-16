@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<patch>
+    <file class="com.pkmngen.game.Game">
+        <implement interface="com/pkmngen/api/IGame" />
+        <getter for="player" casttype="com/pkmngen/api/IPlayer" gettype="Lcom/pkmngen/game/Player;" returntype="Lcom/pkmngen/api/IPlayer;">getPlayer</getter>
+        <method descriptor="create()V">
+            <asm after="324">
+                INVOKESTATIC com/pkmngen/mods/ModLoader#getInstance()Lcom/pkmngen/mods/ModLoader;
+                GETSTATIC com/pkmngen/mods/events/ModEvent#CREATE_FINISHED Lcom/pkmngen/mods/events/ModEvent;
+                ILDC 1
+                ANEWARRAY java/lang/Object
+                DUP
+                ICONST_0
+                ALOAD 0
+                AASTORE
+
+                INVOKEVIRTUAL com/pkmngen/mods/ModLoader#handleEvent(Lcom/pkmngen/mods/events/ModEvent;[Ljava/lang/Object;)V
+            </asm>
+        </method>
+        <method descriptor="render()V">
+            <asm before="0">
+                INVOKESTATIC com/pkmngen/mods/ModLoader#getInstance()Lcom/pkmngen/mods/ModLoader;
+                GETSTATIC com/pkmngen/mods/events/ModEvent#PRE_TICK Lcom/pkmngen/mods/events/ModEvent;
+                ILDC 0
+                ANEWARRAY java/lang/Object
+
+                INVOKEVIRTUAL com/pkmngen/mods/ModLoader#handleEvent(Lcom/pkmngen/mods/events/ModEvent;[Ljava/lang/Object;)V
+            </asm>
+        </method>
+    </file>
+    <file class="com.pkmngen.game.Pokemon">
+        <implement interface="com/pkmngen/api/IPokemon" />
+        <field name="extraData" descriptor="Ljava/util/Map;" />
+        <getter for="extraData" returntype="Ljava/util/Map;">getExtraData</getter>
+        <getter for="level" returntype="I">getLevel</getter>
+        <createmethod name="setShiny" descriptor="(Z)V">
+            ALOAD 0
+            ILOAD 1
+            PUTFIELD com/pkmngen/game/Pokemon#isShiny Z
+            RETURN
+        </createmethod>
+        <createmethod name="getBaseStats" descriptor="()Ljava/util/Map;">
+            ALOAD 0
+            GETFIELD com/pkmngen/game/Pokemon#baseStats Ljava/util/Map;
+            ARETURN
+        </createmethod>
+        <createmethod name="getMaxStats" descriptor="()Ljava/util/Map;">
+            ALOAD 0
+            GETFIELD com/pkmngen/game/Pokemon#maxStats Ljava/util/Map;
+            ARETURN
+        </createmethod>
+        <method descriptor="&lt;init&gt;(Lcom/pkmngen/game/Network$PokemonDataBase;)V">
+            <asm before="2">
+                ALOAD 0
+                ALOAD 1
+                GETFIELD com/pkmngen/game/Network$PokemonDataBase#extraData Ljava/util/Map;
+
+                PUTFIELD com/pkmngen/game/Pokemon#extraData Ljava/util/Map;
+            </asm>
+        </method>
+        <method descriptor="&lt;init&gt;(Ljava/lang/String;ILcom/pkmngen/game/Pokemon$Generation;ZZ)V">
+            <asm before="2">
+                ALOAD 0
+                NEW java/util/HashMap
+                DUP
+                INVOKESPECIAL java/util/HashMap#&lt;init&gt;()V
+                PUTFIELD com/pkmngen/game/Pokemon#extraData Ljava/util/Map;
+            </asm>
+        </method>
+        <method descriptor="calcMaxStats()V">
+            <asm after="126">
+                INVOKESTATIC com/pkmngen/mods/ModLoader#getInstance()Lcom/pkmngen/mods/ModLoader;
+                GETSTATIC com/pkmngen/mods/events/ModEvent#POKEMON_STAT_UPDATE Lcom/pkmngen/mods/events/ModEvent;
+                ILDC 1
+                ANEWARRAY java/lang/Object
+                DUP
+                ICONST_0
+                ALOAD 0
+                AASTORE
+
+                INVOKEVIRTUAL com/pkmngen/mods/ModLoader#handleEvent(Lcom/pkmngen/mods/events/ModEvent;[Ljava/lang/Object;)V
+            </asm>
+        </method>
+        <method descriptor="init(Ljava/lang/String;ILcom/pkmngen/game/Pokemon$Generation;ZZ)V">
+            <asm before="0">
+                INVOKESTATIC com/pkmngen/mods/ModLoader#getInstance()Lcom/pkmngen/mods/ModLoader;
+                GETSTATIC com/pkmngen/mods/events/ModEvent#POKEMON_CREATING Lcom/pkmngen/mods/events/ModEvent;
+                ILDC 1
+                ANEWARRAY java/lang/Object
+                DUP
+                ICONST_0
+                ALOAD 0
+                AASTORE
+
+                INVOKEVIRTUAL com/pkmngen/mods/ModLoader#handleEvent(Lcom/pkmngen/mods/events/ModEvent;[Ljava/lang/Object;)V
+            </asm>
+            <asm after="152">
+                INVOKESTATIC com/pkmngen/mods/ModLoader#getInstance()Lcom/pkmngen/mods/ModLoader;
+                GETSTATIC com/pkmngen/mods/events/ModEvent#POKEMON_CREATE Lcom/pkmngen/mods/events/ModEvent;
+                ILDC 1
+                ANEWARRAY java/lang/Object
+                DUP
+                ICONST_0
+                ALOAD 0
+                AASTORE
+
+                INVOKEVIRTUAL com/pkmngen/mods/ModLoader#handleEvent(Lcom/pkmngen/mods/events/ModEvent;[Ljava/lang/Object;)V
+                ALOAD 0
+                ALOAD 1
+                INVOKEVIRTUAL com/pkmngen/game/Pokemon#updateSpecieInfo(Ljava/lang/String;)V
+            </asm>
+        </method>
+    </file>
+    <file class="com.pkmngen.game.Player">
+        <implement interface="com/pkmngen/api/IPlayer" />
+        <createmethod name="getPokemon" descriptor="()Ljava/util/List;">
+            NEW com/pkmngen/mods/util/ListProxy
+            DUP
+
+            ALOAD 0
+            GETFIELD com/pkmngen/game/Player#pokemon Ljava/util/ArrayList;
+            CHECKCAST java/util/List
+            INVOKESPECIAL com/pkmngen/mods/util/ListProxy#&lt;init&gt;(Ljava/util/List;)V
+
+            CHECKCAST java/util/List
+
+            ARETURN
+        </createmethod>
+    </file>
+    <file class="com.pkmngen.game.Network$PokemonDataBase">
+        <field name="extraData" descriptor="Ljava/util/Map;" />
+        <method descriptor="&lt;init&gt;()V">
+            <asm before="2">
+                ALOAD 0
+                NEW java/util/HashMap
+                DUP
+                INVOKESPECIAL java/util/HashMap#&lt;init&gt;()V
+                PUTFIELD com/pkmngen/game/Network$PokemonDataBase#extraData Ljava/util/Map;
+            </asm>
+        </method>
+        <method descriptor="&lt;init&gt;(Lcom/pkmngen/game/Pokemon;)V">
+            <asm before="2">
+                ALOAD 0
+                ALOAD 1
+                GETFIELD com/pkmngen/game/Pokemon#extraData Ljava/util/Map;
+
+                PUTFIELD com/pkmngen/game/Network$PokemonDataBase#extraData Ljava/util/Map;
+            </asm>
+        </method>
+    </file>
+</patch>
